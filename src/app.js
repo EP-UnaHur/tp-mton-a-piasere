@@ -1,11 +1,16 @@
 const express = require('express');
-//const data = require('../data/data.json')
 const db = require('./db/models')
+const carreraRoute = require('./routes/carrera.route')
+const materiaRoute = require('./routes/materia.route')
 
 const _ = require('lodash');
 const app = express();
+
+const port = 3000;
+
 app.use(express.json())
-const port = 3001;
+app.use(carreraRoute)
+app.use(materiaRoute)
 
 app.get('/', (req, res) => {
     res.send('Hola Mundo!');
