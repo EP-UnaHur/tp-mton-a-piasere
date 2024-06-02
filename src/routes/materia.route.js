@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('./controller');
+const controller = require('../controllers/materia.controller.js');
 
 // Ruta para obtener todas las materias
 router.get('/carreras/:id/materias', controller.getAllMaterias);

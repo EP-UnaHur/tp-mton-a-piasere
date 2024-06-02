@@ -29,6 +29,7 @@ app.listen(port, async () => {
             grado: '1',
             universidad: 'UNAHUR'
         });*/
+        await db.sequelize.sync({force:true});
     } 
     catch(err) {
         console.log(err)

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('./controller');
+const controller = require("../controllers/curso.controllers");
 
 // Ruta para obtener todos los cursos de una materia
 router.get('/materias/:id/cursos', controller.obtenerTodosLosCursosDeUnaMateria);

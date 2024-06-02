@@ -1,4 +1,4 @@
-const {Materia} = require('../db/models')
+const {Materia, Carrera} = require('../db/models')
 const controller = {}
 
 //Listar todas las materias
