@@ -11,6 +11,13 @@ module.exports = (sequelize, DataTypes) => {
         as: 'carrera'
       });
     }
+
+    static associate(models) {
+      Materia.hasMany(models.Curso, {
+        foreignKey: 'materiaId',
+        as: 'cursos'
+      });
+    }
   }
   Materia.init({
     nombre: DataTypes.STRING,

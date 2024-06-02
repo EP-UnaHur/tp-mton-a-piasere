@@ -4,7 +4,7 @@
     "username": "root",
     "password": null,
     "database": "database_development",
-    "host": "./database.sqlite",
+    "host": "dbStore/database.sqlite",
     "dialect": "sqlite"
   },
   "test": {

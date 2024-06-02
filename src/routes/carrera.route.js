@@ -6,7 +6,7 @@ const controller = require('./controller');
 router.get('/carreras', controller.getAllCarers);
 
 // Ruta para obtener una carrera segun id
-router.delete('/carreras/:id', controller.getAllCarers);
+router.get('/carreras/:id', controller.getAllCarers);
 
 // Ruta para crear una carrera
 router.post('/carreras', controller.createCareer);

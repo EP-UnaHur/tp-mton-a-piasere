@@ -21,12 +21,6 @@ const getMateriaById = async(req, res) => {
 }
 controller.getMateriaById = getMateriaById;
 
-//Crear materia
-const crearMateria = async (req, res) => {
-    const cliente = await Materia.create(req.body)
-    res.status(201).json(cliente)
-}
-controller.crearMateria = crearMateria
 
 //Borrar materia
 const eliminarMateria = async (req, res) => {
@@ -66,7 +60,7 @@ const obtenerMateriasPorCarrera = async (req, res) => {
 
 controller.obtenerMateriasPorCarrera = obtenerMateriasPorCarrera;
 
-//Crea un materia dentro de una carrera
+//Crea una materia dentro de una carrera
 const crearMateriaEnCarrera = async (req, res) => {
     const { carreraId } = req.params;
     const { nombre } = req.body;
@@ -78,8 +72,8 @@ const crearMateriaEnCarrera = async (req, res) => {
             return res.status(404).json({ message: 'Carrera no encontrada' });
         }
 
-        // Crea la materia asociada a la carrera
-        const materia = await Materia.create({ nombre, carreraId });
+    // Crea la materia asociada a la carrera
+    const materia = await Materia.create({ nombre, cuatrimestral, anio, carreraId });
         res.status(201).json(materia);
     } catch (error) {
         res.status(500).json({ message: 'Error al crear la materia', error });

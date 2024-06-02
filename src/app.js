@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('./db/models')
 const carreraRoute = require('./routes/carrera.route')
 const materiaRoute = require('./routes/materia.route')
+const cursoRoute = require('./routes/curso.route')
 
 const _ = require('lodash');
 const app = express();
@@ -11,6 +12,7 @@ const port = 3000;
 app.use(express.json())
 app.use(carreraRoute)
 app.use(materiaRoute)
+app.use(cursoRoute)
 
 app.get('/', (req, res) => {
     res.send('Hola Mundo!');
