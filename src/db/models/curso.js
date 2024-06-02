@@ -1,4 +1,5 @@
 'use strict';
+
 const {
   Model
 } = require('sequelize');
@@ -10,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'materiaId',
         as: 'materia'
       });
+
+      Curso.belongsToMany(models.Profesor,{
+        through: 'curso_profesor',
+        as: 'profesores',
+        foreignKey: 'curso_id'  
+      })
     }
   }
   
