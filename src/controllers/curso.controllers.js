@@ -1,4 +1,4 @@
-const {Curso, Materia} = require('../db/models')
+const {Curso, Materia, Profesor} = require('../db/models')
 const controller = {}
 
 //Listar todos los cursos
@@ -21,46 +21,6 @@ const getCursoById = async(req, res) => {
 }
 controller.getCursoById = getCursoById;
 
-//Crea un curso para una materia
-const crearCursoParaMateria = async (req, res) => {
-    const { materiaId } = req.params;
-    const { nombre } = req.body;
-
-    try {
-        // Verifica si la materia existe
-        const materia = await Materia.findByPk(materiaId);
-        if (!materia) {
-            return res.status(404).json({ message: 'Materia no encontrada' });
-        }
-
-    // Crea el curso asociado a la materia
-    const curso = await Curso.create({ comision, turno, fechaInicio, fechaFin, materiaId });
-        res.status(201).json(curso);
-    } catch (error) {
-    res.status(500).json({ message: 'Error al crear el curso', error });
-    }
-};
-
-controller.crearCursoParaMateria = crearCursoParaMateria;
-
-// Obtener todos los cursos de una materia
-const obtenerTodosLosCursosDeUnaMateria = async (req, res) => {
-    const { materiaId } = req.params;
-    const materia = await Materia.findByPk(materiaId, {
-        include: [{
-            model: Curso,
-            as: 'cursos'
-        }]
-    });
-
-    if (materia) {
-        res.status(200).json(materia.cursos);
-    } else {
-        res.status(404).json({ message: 'Materia no encontrada' });
-    }
-}
-
-controller.obtenerTodosLosCursosDeUnaMateria = obtenerTodosLosCursosDeUnaMateria;
 
 //Borrar un curso por id
 const eliminarCurso = async (req, res) => {
@@ -103,6 +63,60 @@ const actualizarCurso = async (req, res) => {
 };
 
 controller.actualizarCurso = actualizarCurso;
+
+//Asociar un curso a uno o varios profesores
+const crearAsociacionCursoProfesor = async (req, res) => {
+    const id = req.params.id;
+    const { profesoresIds } = req.body;
+
+    // Verifica si el curso existe
+    const curso = await Curso.findByPk(id);
+    if (!curso) {
+        return res.status(404).json({ message: 'Curso no encontrado' });
+    }
+
+    //FALTA ERROR 400
+
+    // Verifica si todos los profesores existen
+    const profesores = await Profesor.findAll({
+        where: {
+            id: profesoresIds
+        }
+    });
+
+    if (profesores.length !== profesoresIds.length) {
+        return res.status(404).json({ message: 'Uno o más profesores no encontrados' });
+    }
+
+    // Asocia los profesores al curso
+    await curso.addProfesores(profesores);
+
+    res.status(201).json({ message: 'Asociación creada con éxito' });
+};
+
+controller.crearAsociacionCursoProfesor = crearAsociacionCursoProfesor;
+
+//Obtener todos los profesores de un Curso
+const obtenerProfesoresDeCurso = async (req, res) => {
+    const id = req.params.id;
+
+    // Verifica si el curso existe e incluye los profesores asociados
+    const curso = await Curso.findByPk(id, {
+        include: {
+            model: Profesor,
+            as: 'profesores',
+            through: { attributes: [] } // Excluye atributos de la tabla intermedia
+        }
+    });
+
+    if (!curso) {
+        return res.status(404).json({ message: 'Curso no encontrado' });
+    }
+
+    res.status(200).json(curso.profesores);
+};
+
+controller.obtenerProfesoresDeCurso = obtenerProfesoresDeCurso;
 
 
 module.exports = controller

@@ -11,5 +11,10 @@ router.get('/carreras/:id', controller.getCareerById);
 // Ruta para crear una carrera
 router.post('/carreras', controller.createCareer);
 
+// Ruta para obtener todas las materias de una carrera
+router.get('/carreras/:id/materias', controller.obtenerMateriasPorCarrera);
+
+// Ruta para crear una materia en una carrera
+router.post('/carreras/:id/materia', controller.crearMateriaEnCarrera);
 
 module.exports = router;

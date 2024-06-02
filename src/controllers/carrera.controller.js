@@ -28,4 +28,45 @@ const createCareer = async (req, res) => {
 }
 controller.createCareer = createCareer
 
+// Obtener todas las materias de una carrera
+const obtenerMateriasPorCarrera = async (req, res) => {
+    const { carreraId } = req.params;
+    const carrera = await Carrera.findByPk(carreraId, {
+        include: [{
+            model: Materia,
+            as: 'materias'
+        }]
+    });
+
+    if (carrera) {
+        res.status(200).json(carrera.materias);
+    } else {
+        res.status(404).json({ message: 'Carrera no encontrada' });
+    }
+}
+
+controller.obtenerMateriasPorCarrera = obtenerMateriasPorCarrera;
+
+//Crea una materia dentro de una carrera
+const crearMateriaEnCarrera = async (req, res) => {
+    const { carreraId } = req.params;
+    const { nombre } = req.body;
+
+    try {
+        // Verifica si la carrera existe
+        const carrera = await Carrera.findByPk(carreraId);
+        if (!carrera) {
+            return res.status(404).json({ message: 'Carrera no encontrada' });
+        }
+
+    // Crea la materia asociada a la carrera
+    const materia = await Materia.create({ nombre, cuatrimestral, anio, carreraId });
+        res.status(201).json(materia);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al crear la materia', error });
+    }
+};
+
+controller.crearMateriaEnCarrera = crearMateriaEnCarrera;
+
 module.exports = controller

@@ -2,19 +2,20 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/materia.controller.js');
 
-// Ruta para obtener todas las materias
-router.get('/carreras/:id/materias', controller.getAllMaterias);
 
-// Ruta para obtener todas las materias de una carrera
-router.get('/carreras/:carreraId/materias', controller.obtenerMateriasPorCarrera);
+// Ruta para obtener todas las materias
+router.get('/materias', controller.getAllMaterias);
 
 // Ruta para obtener una materia segun id
 router.get('/materias/:id', controller.getMateriaById);
 
-// Ruta para crear una materia en una carrera
-router.post('/carreras/:id/materia', controller.crearMateriaEnCarrera);
-
 // Ruta para eliminar una materia
 router.delete('/materias/:id', controller.eliminarMateria);
+
+// Ruta para obtener todos los cursos de una materia
+router.get('/materias/:id/cursos', controller.obtenerTodosLosCursosDeUnaMateria);
+
+// Ruta para crear un curso para una materia
+router.post('/materias/:id/curso', controller.crearCursoParaMateria);
 
 module.exports = router;

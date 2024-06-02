@@ -41,46 +41,47 @@ const eliminarMateria = async (req, res) => {
 
 controller.eliminarMateria = eliminarMateria;
 
-// Obtener todas las materias de una carrera
-const obtenerMateriasPorCarrera = async (req, res) => {
-    const { carreraId } = req.params;
-    const carrera = await Carrera.findByPk(carreraId, {
+
+// Obtener todos los cursos de una materia
+const obtenerTodosLosCursosDeUnaMateria = async (req, res) => {
+    const { materiaId } = req.params;
+    const materia = await Materia.findByPk(materiaId, {
         include: [{
-            model: Materia,
-            as: 'materias'
+            model: Curso,
+            as: 'cursos'
         }]
     });
 
-    if (carrera) {
-        res.status(200).json(carrera.materias);
+    if (materia) {
+        res.status(200).json(materia.cursos);
     } else {
-        res.status(404).json({ message: 'Carrera no encontrada' });
+        res.status(404).json({ message: 'Materia no encontrada' });
     }
 }
 
-controller.obtenerMateriasPorCarrera = obtenerMateriasPorCarrera;
+controller.obtenerTodosLosCursosDeUnaMateria = obtenerTodosLosCursosDeUnaMateria;
 
-//Crea una materia dentro de una carrera
-const crearMateriaEnCarrera = async (req, res) => {
-    const { carreraId } = req.params;
+//Crea un curso para una materia
+const crearCursoParaMateria = async (req, res) => {
+    const { materiaId } = req.params;
     const { nombre } = req.body;
 
     try {
-        // Verifica si la carrera existe
-        const carrera = await Carrera.findByPk(carreraId);
-        if (!carrera) {
-            return res.status(404).json({ message: 'Carrera no encontrada' });
+        // Verifica si la materia existe
+        const materia = await Materia.findByPk(materiaId);
+        if (!materia) {
+            return res.status(404).json({ message: 'Materia no encontrada' });
         }
 
-    // Crea la materia asociada a la carrera
-    const materia = await Materia.create({ nombre, cuatrimestral, anio, carreraId });
-        res.status(201).json(materia);
+    // Crea el curso asociado a la materia
+    const curso = await Curso.create({ comision, turno, fechaInicio, fechaFin, materiaId });
+        res.status(201).json(curso);
     } catch (error) {
-        res.status(500).json({ message: 'Error al crear la materia', error });
+    res.status(500).json({ message: 'Error al crear el curso', error });
     }
 };
 
-controller.crearMateriaEnCarrera = crearMateriaEnCarrera;
+controller.crearCursoParaMateria = crearCursoParaMateria;
 
 
 module.exports = controller

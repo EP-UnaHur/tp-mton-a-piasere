@@ -4,11 +4,7 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class CursoProfesor extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+    
     static associate(models) {
 
       CursoProfesor.belongsTo(models.Curso,{
@@ -28,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     profesorId: DataTypes.NUMBER
   }, {
     sequelize,
-    modelName: 'Curso-profesor',
+    modelName: 'CursoProfesor',
   });
   return CursoProfesor;
 };

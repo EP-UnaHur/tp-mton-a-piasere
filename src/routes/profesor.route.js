@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/profesor.controller.js');
 
-// Ruta para obtener todas las profesor
+// Ruta para obtener todos las profesor
 router.get('/profesores', controller.getAllProfesores);
 
 // Ruta para obtener una profesor segun id
@@ -17,5 +17,7 @@ router.put('/profesores/:id', controller.editarProfesor);
 // Ruta para eliminar un profesor
 router.delete('/profesores/:id', controller.deleteProfesor);
 
+//Ruta para obtener todos los cursos que tiene un profesor
+router.get('/profesores/:id/cursos', controller.obtenerCursosDeProfesor);
 
 module.exports = router;

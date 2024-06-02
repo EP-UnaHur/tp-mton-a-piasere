@@ -1,11 +1,13 @@
 const {Profesor} = require('../db/models');
 const controller = {};
 
+//Obtener todos los profesores
 const getAllProfesores = async (req, res) => {
     res.status(200).json(await Profesor.findAll({}))
 }
 controller.getAllProfesores = getAllProfesores
 
+//Encontrar un profesor por id
 const getProfesorById = async(req, res) => {
     const id = req.params.id
     const profesor = await Profesor.findByPk(id)
@@ -18,12 +20,14 @@ const getProfesorById = async(req, res) => {
 }
 controller.getProfesorById = getProfesorById;
 
+//Crear un profesor
 const createProfesor = async (req, res) => {
     const profesor = await Profesor.create(req.body)
     res.status(201).json(profesor)
 }
 controller.createProfesor = createProfesor
 
+//Editar info de profesor
 const editarProfesor = async (req,res) => {
     const id = req.params.id
     const {nombre, fechaNacimiento, legajo, activo} = req.body
@@ -43,6 +47,7 @@ const editarProfesor = async (req,res) => {
 
 controller.editarProfesor = editarProfesor
 
+//Eliminar un profesor
 const deleteProfesor = async (req, res) => {
     const id = req.params.id
     try {
@@ -60,5 +65,27 @@ const deleteProfesor = async (req, res) => {
 }
 
 controller.deleteProfesor = deleteProfesor;
+
+//Obtener todos los cursos de un profesor
+const obtenerCursosDeProfesor = async (req, res) => {
+    const id = req.params.id;
+
+    // Verifica si el profesor existe e incluye los cursos asociados
+    const profesor = await Profesor.findByPk(id, {
+        include: {
+            model: Curso,
+            as: 'cursos',
+            through: { attributes: [] } // Excluye atributos de la tabla intermedia
+        }
+    });
+
+    if (!profesor) {
+        return res.status(404).json({ message: 'Profesor no encontrado' });
+    }
+
+    res.status(200).json(profesor.cursos);
+};
+
+controller.obtenerCursosDeProfesor = obtenerCursosDeProfesor;
 
 module.exports = controller;
