@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/materia.controller.js');
-
+const middleware = require('../middlewares/existeConId.middleware.js')
+const {Materia} = require('../db/models');
 
 // Ruta para obtener todas las materias
 router.get('/materias', controller.getAllMaterias);
 
 // Ruta para obtener una materia segun id
-router.get('/materias/:id', controller.getMateriaById);
+router.get('/materias/:id', middleware.existsById(Materia),controller.getMateriaById);
 
 // Ruta para eliminar una materia
-router.delete('/materias/:id', controller.eliminarMateria);
+router.delete('/materias/:id', middleware.existsById(Materia),controller.eliminarMateria);
 
 // Ruta para obtener todos los cursos de una materia
-router.get('/materias/:id/cursos', controller.obtenerTodosLosCursosDeUnaMateria);
+router.get('/materias/:id/cursos', middleware.existsById(Materia),controller.obtenerTodosLosCursosDeUnaMateria);
 
 // Ruta para crear un curso para una materia
-router.post('/materias/:id/curso', controller.crearCursoParaMateria);
+router.post('/materias/:id/curso', middleware.existsById(Materia),controller.crearCursoParaMateria);
 
 module.exports = router;

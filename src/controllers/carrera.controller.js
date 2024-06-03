@@ -1,4 +1,4 @@
-const {Carrera} = require('../db/models')
+const {Carrera, Materia} = require('../db/models')
 const controller = {}
 
 //Listar todas las carreras
@@ -11,13 +11,8 @@ controller.getAllCarrers = getAllCarers
 const getCareerById = async(req, res) => {
     const id = req.params.id
     const carrera = await Carrera.findByPk(id)
-
-    if (carrera) {
-        res.status(200).json(carrera)
-    }
-    else {
-        res.status(404).json({ message: "Carrera no encontrada" });
-    }
+    res.status(200).json(carrera)
+    
 }
 controller.getCareerById = getCareerById;
 
@@ -30,36 +25,24 @@ controller.createCareer = createCareer
 
 // Obtener todas las materias de una carrera
 const obtenerMateriasPorCarrera = async (req, res) => {
-    const { carreraId } = req.params;
+    const carreraId = req.params.id;
     const carrera = await Carrera.findByPk(carreraId, {
-        include: [{
+        include:[{
             model: Materia,
             as: 'materias'
         }]
     });
-
-    if (carrera) {
-        res.status(200).json(carrera.materias);
-    } else {
-        res.status(404).json({ message: 'Carrera no encontrada' });
-    }
+    res.status(200).json(carrera);
 }
 
 controller.obtenerMateriasPorCarrera = obtenerMateriasPorCarrera;
 
 //Crea una materia dentro de una carrera
 const crearMateriaEnCarrera = async (req, res) => {
-    const { carreraId } = req.params;
-    const { nombre } = req.body;
+    const carreraId = req.params.id;
+    const { nombre, cuatrimestral, anio } = req.body;
 
     try {
-        // Verifica si la carrera existe
-        const carrera = await Carrera.findByPk(carreraId);
-        if (!carrera) {
-            return res.status(404).json({ message: 'Carrera no encontrada' });
-        }
-
-    // Crea la materia asociada a la carrera
     const materia = await Materia.create({ nombre, cuatrimestral, anio, carreraId });
         res.status(201).json(materia);
     } catch (error) {

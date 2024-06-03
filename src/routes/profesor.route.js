@@ -1,23 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/profesor.controller.js');
+const middleware = require('../middlewares/existeConId.middleware.js')
+const {Profesor} = require('../db/models')
 
-// Ruta para obtener todos las profesor
 router.get('/profesores', controller.getAllProfesores);
 
-// Ruta para obtener una profesor segun id
-router.get('/profesores/:id', controller.getProfesorById);
+router.get('/profesores/:id',middleware.existsById(Profesor) ,controller.getProfesorById);
 
-// Ruta para crear una profesor
 router.post('/profesores', controller.createProfesor);
 
-// Ruta para editar un profesor
-router.put('/profesores/:id', controller.editarProfesor);
+router.put('/profesores/:id', middleware.existsById(Profesor),controller.editarProfesor);
 
-// Ruta para eliminar un profesor
-router.delete('/profesores/:id', controller.deleteProfesor);
+router.delete('/profesores/:id', middleware.existsById(Profesor),controller.deleteProfesor);
 
-//Ruta para obtener todos los cursos que tiene un profesor
-router.get('/profesores/:id/cursos', controller.obtenerCursosDeProfesor);
+router.get('/profesores/:id/cursos', middleware.existsById(Profesor),controller.obtenerCursosDeProfesor);
 
 module.exports = router;

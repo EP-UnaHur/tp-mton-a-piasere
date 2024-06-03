@@ -1,4 +1,4 @@
-const {Profesor} = require('../db/models');
+const {Profesor, Curso} = require('../db/models');
 const controller = {};
 
 //Obtener todos los profesores
@@ -83,7 +83,7 @@ const obtenerCursosDeProfesor = async (req, res) => {
         return res.status(404).json({ message: 'Profesor no encontrado' });
     }
 
-    res.status(200).json(profesor.cursos);
+    res.status(200).json(profesor);
 };
 
 controller.obtenerCursosDeProfesor = obtenerCursosDeProfesor;
