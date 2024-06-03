@@ -1,3 +1,5 @@
+const {Profesor} = require('../db/models')
+
 const middleware = {}
 
 const existsById = (Model) => {
@@ -36,6 +38,26 @@ const validaSchema = (schema) => {
 }
 
 middleware.validaSchema = validaSchema;
+
+const existsByIdProfesorEnBody = (Model) => {
+    
+    return async (req, res, next) => {
+        const profesores = req.body;
+        for(profe of profesores){
+            const profesor = await Profesor.findByPk(profe.id)
+            const modelName = Model.modelName || (Model.options.name && Model.options.name.singular);
+            if (!profesor) {
+                return res.status(404).json({
+                mensaje: `El ${modelName} con id ${profe.id} no existe`
+                })
+            }
+        }
+        next()
+    }    
+
+}
+
+middleware.existsByIdProfesorEnBody = existsByIdProfesorEnBody;
 
 module.exports = middleware;
 

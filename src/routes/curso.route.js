@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require("../controllers/curso.controllers");
 const middleware = require('../middlewares/existeConId.middleware.js')
-const {Curso} = require('../db/models')
+const {Curso, Profesor} = require('../db/models')
 // Ruta para obtener todos los cursos
 router.get('/cursos', controller.getAllCursos);
 
@@ -16,7 +16,7 @@ router.delete('/cursos/:id',middleware.existsById(Curso),controller.eliminarCurs
 router.put('/cursos/:id',middleware.existsById(Curso), controller.actualizarCurso);
 
 //Crea la asociacion de un curso con 1 o N profesores
-router.post('/cursos/:id/profesores', middleware.existsById(Curso),controller.crearAsociacionCursoProfesor)
+router.post('/cursos/:id/profesores', middleware.existsById(Curso),middleware.existsByIdProfesorEnBody(Profesor),controller.crearAsociacionCursoProfesor)
 
 //Obtener todos los profesores de un Curso
 router.get('/cursos/:id/profesores',middleware.existsById(Curso),controller.obtenerProfesoresDeCurso);

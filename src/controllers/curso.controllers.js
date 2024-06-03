@@ -55,8 +55,7 @@ controller.actualizarCurso = actualizarCurso;
 //Asociar un curso a uno o varios profesores
 const crearAsociacionCursoProfesor = async (req, res) => {
     const idCurso = req.params.id;
-    const profesores = [req.body];
-
+    const profesores = req.body;
     profesores.map(async (profe) =>{
         await CursoProfesor.create({CursoId: idCurso, ProfesorId: profe.id})
     });
