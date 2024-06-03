@@ -11,12 +11,7 @@ controller.getAllProfesores = getAllProfesores
 const getProfesorById = async(req, res) => {
     const id = req.params.id
     const profesor = await Profesor.findByPk(id)
-    if (profesor) {
-        res.status(200).json(profesor)
-    }
-    else {
-        res.status(404).json({ message: `El profesor con ${id} no se encuentra registrado` });
-    }
+    res.status(200).json(profesor)
 }
 controller.getProfesorById = getProfesorById;
 
@@ -32,10 +27,6 @@ const editarProfesor = async (req,res) => {
     const id = req.params.id
     const {nombre, fechaNacimiento, legajo, activo} = req.body
     const profesor = await Profesor.findByPk(id);
-    if(!profesor){
-        res.status(404).json({message: `El profesor con ${id} no se encuentra registrado`})
-    }
-
     profesor.nombre = profesor.nombre !== undefined ? nombre : profesor.nombre;
     profesor.fechaNacimiento = profesor.fechaNacimiento !== undefined ? fechaNacimiento : profesor.fechaNacimiento;
     profesor.legajo = profesor.legajo !== undefined ? legajo : profesor.legajo;
@@ -52,13 +43,8 @@ const deleteProfesor = async (req, res) => {
     const id = req.params.id
     try {
         const profesor = await Profesor.findByPk(id);
-        if(profesor){
-            await profesor.destroy();
-            res.status(200).json({message: `El profesor con id: ${id} se elimino correctamente`});
-        }
-        else{
-            res.status(404).json({message: `El profesor con id: ${id} no se encuentra registrado`})
-        }
+        await profesor.destroy();
+        res.status(200).json({message: `El profesor con id: ${id} se elimino correctamente`});
     } catch (error) {
         res.status(500).json({message: 'Error al eliminar el profesor', error })
     }
@@ -78,10 +64,6 @@ const obtenerCursosDeProfesor = async (req, res) => {
             through: { attributes: [] } // Excluye atributos de la tabla intermedia
         }
     });
-
-    if (!profesor) {
-        return res.status(404).json({ message: 'Profesor no encontrado' });
-    }
 
     res.status(200).json(profesor);
 };
