@@ -4,7 +4,6 @@ const controller = require('../controllers/materia.controller.js');
 const middleware = require('../middlewares/existeConId.middleware.js')
 const {Materia} = require('../db/models');
 const {cursoSchema} = require('../schemas/curso.schema.js');
-const {materiaSchema} = require('../schemas/materia.schema.js')
 
 // Ruta para obtener todas las materias
 router.get('/materias', controller.getAllMaterias);

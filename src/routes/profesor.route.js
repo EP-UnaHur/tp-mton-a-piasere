@@ -3,12 +3,12 @@ const router = express.Router();
 const controller = require('../controllers/profesor.controller.js');
 const middleware = require('../middlewares/existeConId.middleware.js')
 const {Profesor} = require('../db/models')
-
+const profesorSchema = require('../schemas/profesor.schema.js')
 router.get('/profesores', controller.getAllProfesores);
 
-router.get('/profesores/:id',middleware.existsById(Profesor) ,controller.getProfesorById);
+router.get('/profesores/:id',middleware.existsById(Profesor),controller.getProfesorById);
 
-router.post('/profesores', controller.createProfesor);
+router.post('/profesores', middleware.validaSchema(profesorSchema),controller.createProfesor);
 
 router.put('/profesores/:id', middleware.existsById(Profesor),controller.editarProfesor);
 
